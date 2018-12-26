@@ -18,7 +18,8 @@ def estimator(radius, radial_density, mc_points):
     fs_start = time.time()
     fs_unit_count = 0
     fs_total_unit = pow((2 * simu_density) + 1, 3)
-
+    # Running each unit in the 3D simulation space to compute the
+    # distance from the origin
     for i in range(0, (2 * simu_density) + 1):
         for j in range(0, (2 * simu_density) + 1):
             for k in range(0, (2 * simu_density) + 1):
@@ -52,6 +53,7 @@ def estimator(radius, radial_density, mc_points):
     bound_map = []
     mc_count = 0
     mc_start = time.time()
+    # Initialize a random arrays of estimator points
     for i in range(0, mc_points):
         estimator_point.append([random.randint(0,
                                ((simu_density * 2) + 1)) for _ in range(3)])
@@ -92,6 +94,7 @@ def plot(estimator_point, bound_map):
     plt_y = []
     plt_z = []
     print("plot")
+    # Mapping the MC estimator points to constituent axes
     for element in estimator_point:
         plt_x.append(element[0])
         plt_y.append(element[1])
