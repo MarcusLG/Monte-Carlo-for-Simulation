@@ -1,3 +1,6 @@
+from mpl_toolkits import mplot3d
+from matplotlib import animation
+import matplotlib.pyplot as plt
 import numpy as np
 import math
 import random
@@ -46,6 +49,7 @@ def estimator(radius, radial_density, mc_points):
 
     # Monte-carlo estimator
     estimator_point = []
+    bound_map = []
     mc_count = 0
     mc_start = time.time()
     for i in range(0, mc_points):
@@ -59,7 +63,10 @@ def estimator(radius, radial_density, mc_points):
         mc_rad = mc_rad * radius / simu_density
         mc_rad = int(math.floor(mc_rad))
         if mc_rad < radius:
+            bound_map.append(100)  # 1 indicating within boundary
             mc_count += 1
+        else:
+            bound_map.append(1)
     mc_volume = mc_count / mc_points  # non-normalized volume
     mc_volume = mc_volume * pow(2 * radius, 3)
     mc_stop = time.time()
@@ -76,6 +83,25 @@ def estimator(radius, radial_density, mc_points):
           "(Monte-carlo over Full-simulation): \n" +
           str(abs((mc_stop - mc_start) - (fs_stop - fs_start)) *
               100 / (fs_stop - fs_start)) + " %.")
+    # Plotting the random distribution of the spherical representation
+    plot(estimator_point, bound_map)
+
+
+def plot(estimator_point, bound_map):
+    plt_x = []
+    plt_y = []
+    plt_z = []
+    print("plot")
+    for element in estimator_point:
+        plt_x.append(element[0])
+        plt_y.append(element[1])
+        plt_z.append(element[2])
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.scatter3D(plt_x, plt_y, plt_z, c=bound_map, cmap='flag')
+    fig.show()
+    plt.pause(100000000)
+
 
 radius = int(input("Radius of sphere (Integer): "))
 radial_density = int(input("Simulation density(Integer, " +
